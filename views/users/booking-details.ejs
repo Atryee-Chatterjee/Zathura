@@ -1,0 +1,327 @@
+<% layout("/layouts/boilerplate") %>
+
+<!-- Back to Trips Button -->
+<div class="booking-nav">
+    <a href="/trips" class="back-home-btn">
+        <i class="fa-solid fa-arrow-left"></i> Back to Trips
+    </a>
+</div>
+
+<div class="booking-details-container">
+    <div class="booking-header">
+        <h1>Booking Details</h1>
+        <span class="booking-status <%= booking.status %>">
+            <%= booking.status === 'confirmed' ? 'Confirmed' : booking.status === 'cancelled' ? 'Cancelled' : 'Completed' %>
+        </span>
+    </div>
+    
+    <div class="booking-content">
+        <div class="booking-listing">
+            <div class="listing-image">
+                <img src="<%= booking.listing.image.url %>" alt="<%= booking.listing.title %>">
+            </div>
+            <div class="listing-info">
+                <h2><%= booking.listing.title %></h2>
+                <p class="location"><i class="fa-regular fa-map"></i> <%= booking.listing.location %>, <%= booking.listing.country %></p>
+                <p class="description"><%= booking.listing.description %></p>
+                <a href="/listings/<%= booking.listing._id %>" class="view-listing-btn">View Listing</a>
+            </div>
+        </div>
+        
+        <div class="booking-summary">
+            <h3>Booking Summary</h3>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <label>Booking Date</label>
+                    <span><%= new Date(booking.bookingDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+                </div>
+                <div class="summary-item">
+                    <label>Booking ID</label>
+                    <span><%= booking._id %></span>
+                </div>
+                <div class="summary-item">
+                    <label>Check-in</label>
+                    <span><%= new Date(booking.checkIn).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+                </div>
+                <div class="summary-item">
+                    <label>Check-out</label>
+                    <span><%= new Date(booking.checkOut).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+                </div>
+                <div class="summary-item">
+                    <label>Nights</label>
+                    <span><%= booking.nights %></span>
+                </div>
+                <div class="summary-item">
+                    <label>Guests</label>
+                    <span><%= booking.guests %></span>
+                </div>
+            </div>
+            
+            <div class="price-breakdown">
+                <h3>Price Breakdown</h3>
+                <div class="price-row">
+                    <span>₹<%= booking.listing.price.toLocaleString("en-IN") %> x <%= booking.nights %> nights</span>
+                    <span>₹<%= (booking.listing.price * booking.nights).toLocaleString("en-IN") %></span>
+                </div>
+                <div class="price-row">
+                    <span>Cleaning fee</span>
+                    <span>₹1,200</span>
+                </div>
+                <div class="price-row">
+                    <span>Service fee</span>
+                    <span>₹800</span>
+                </div>
+                <div class="price-row total">
+                    <span>Total</span>
+                    <span>₹<%= booking.totalPrice.toLocaleString("en-IN") %></span>
+                </div>
+            </div>
+            
+            <% if(booking.status === 'confirmed') { 
+                const now = new Date();
+                const checkIn = new Date(booking.checkIn);
+                const hoursUntilCheckIn = (checkIn - now) / (1000 * 60 * 60);
+            %>
+                <% if(hoursUntilCheckIn > 24) { %>
+                    <form action="/bookings/<%= booking._id %>/cancel" method="POST" class="cancel-booking-form">
+                        <button type="submit" class="cancel-booking-btn" onclick="return confirm('Are you sure you want to cancel this booking?')">
+                            Cancel Booking
+                        </button>
+                    </form>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<style>
+.booking-nav {
+    margin: 1rem 2rem 0 1rem;
+}
+
+.back-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #222222;
+    text-decoration: none;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    border-radius: 40px;
+    border: 1px solid #dddddd;
+    transition: all 0.2s ease;
+    background-color: white;
+}
+
+.back-home-btn:hover {
+    background-color: #f7f7f7;
+    border-color: #222222;
+}
+
+.booking-details-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.booking-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #222222;
+}
+
+.booking-status {
+    padding: 0.5rem 1.5rem;
+    border-radius: 40px;
+    font-weight: 500;
+}
+
+.booking-status.confirmed {
+    background-color: #e6f7e6;
+    color: #00a699;
+}
+
+.booking-status.cancelled {
+    background-color: #ffe6e6;
+    color: #ff385c;
+}
+
+.booking-status.completed {
+    background-color: #f0f0f0;
+    color: #717171;
+}
+
+.booking-content {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+}
+
+.booking-listing {
+    background: white;
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.listing-image {
+    height: 250px;
+    overflow: hidden;
+}
+
+.listing-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.listing-info {
+    padding: 1.5rem;
+}
+
+.listing-info h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #222222;
+    margin-bottom: 0.5rem;
+}
+
+.listing-info .location {
+    color: #717171;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.listing-info .location i {
+    color: #ff385c;
+    margin-right: 0.3rem;
+}
+
+.listing-info .description {
+    color: #222222;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.view-listing-btn {
+    display: inline-block;
+    background-color: #222222;
+    color: white;
+    text-decoration: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 40px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.view-listing-btn:hover {
+    background-color: #000000;
+}
+
+.booking-summary {
+    background: white;
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.booking-summary h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #222222;
+    margin-bottom: 1.5rem;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-item label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #717171;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.summary-item span {
+    font-size: 0.95rem;
+    color: #222222;
+}
+
+.price-breakdown {
+    border-top: 1px solid #dddddd;
+    padding-top: 1.5rem;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    color: #222222;
+    font-size: 0.95rem;
+}
+
+.price-row.total {
+    font-weight: 600;
+    border-top: 1px solid #dddddd;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+}
+
+.cancel-booking-form {
+    margin-top: 2rem;
+}
+
+.cancel-booking-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: #fff1f0;
+    color: #ff385c;
+    border: 1px solid #ff385c;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancel-booking-btn:hover {
+    background-color: #ff385c;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .booking-nav {
+        margin: 1rem 1rem 0 1rem;
+    }
+    
+    .booking-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .booking-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

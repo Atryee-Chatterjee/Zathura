@@ -1,0 +1,486 @@
+<% layout("/layouts/boilerplate") %>
+<script>
+    const mapToken = "<%= process.env.MAP_TOKEN %>";
+    const listing = <%- JSON.stringify(listing) %>;
+    
+    // Real-time date functions
+    function formatDate(date) {
+        return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+    }
+    
+    function getTomorrow() {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return tomorrow;
+    }
+    
+    function getDayAfterTomorrow() {
+        const dayAfter = new Date();
+        dayAfter.setDate(dayAfter.getDate() + 2);
+        return dayAfter;
+    }
+</script>
+
+<div class="show-container">
+    <!-- Title and Wishlist Row -->
+    <div class="title-row">
+        <h1 class="listing-title"><%= listing.title %></h1>
+        <button class="wishlist-icon" data-listing-id="<%= listing._id %>" id="showPageWishlistBtn">
+            <i class="fa-regular fa-heart"></i><h6>Add to Wishlist</h6>
+        </button>
+    </div>
+
+    <!-- Basic Info Row -->
+    <div class="basic-info">
+        <span class="rating-badge">
+            <i class="fa-solid fa-star"></i> 
+            <% 
+                let avgRating = 0;
+                let reviewCount = 0;
+                if(listing.reviews && listing.reviews.length > 0) {
+                    const totalRating = listing.reviews.reduce((sum, review) => sum + review.rating, 0);
+                    avgRating = (totalRating / listing.reviews.length).toFixed(2);
+                    reviewCount = listing.reviews.length;
+                }
+            %>
+            <%= reviewCount > 0 ? avgRating : "New" %> · <%= reviewCount %> reviews
+        </span>
+        <span class="location-badge">
+            <i class="fa-regular fa-map"></i> <%= listing.location %>, <%= listing.country %>
+        </span>
+    </div>
+
+    <!-- Image Gallery - Single Image -->
+    <div class="image-gallery">
+        <div class="main-image">
+            <img src="<%= listing.image.url %>" alt="<%= listing.title %>">
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="content-grid">
+        <!-- Left Column - Listing Details (Shows first on mobile) -->
+        <div class="left-column">
+            <!-- Host Info -->
+            <div class="host-info">
+                <div class="host-avatar">
+                    <span class="host-initial"><%= listing.owner.username.charAt(0).toUpperCase() %></span>
+                </div>
+                <div class="host-details">
+                    <h3>Hosted by <%= listing.owner.username %></h3>
+                    <p><%= listing.location %>, <%= listing.country %></p>
+                    <p class="host-meta">
+                        <span><i class="fa-regular fa-user"></i> 2 guests</span>
+                        <span><i class="fa-regular fa-bed"></i> 1 bedroom</span>
+                        <span><i class="fa-regular fa-bed"></i> 1 bed</span>
+                        <span><i class="fa-regular fa-bath"></i> 1 bath</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Key Features -->
+            <div class="key-features">
+                <div class="feature">
+                    <i class="fa-regular fa-star"></i>
+                    <div>
+                        <h4>Guest favourite</h4>
+                        <p>One of the most loved homes on Zathura, according to guests</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <i class="fa-regular fa-building"></i>
+                    <div>
+                        <h4>Self check-in</h4>
+                        <p>Check yourself in with the lockbox</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <i class="fa-regular fa-calendar"></i>
+                    <div>
+                        <h4>Free cancellation</h4>
+                        <p>Cancel before 12 March for partial refund</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="description">
+                <p><%= listing.description %></p>
+            </div>
+
+            <!-- Where you'll sleep -->
+            <div class="sleep-section">
+                <h2>Where you'll sleep</h2>
+                <div class="sleep-options">
+                    <div class="sleep-card">
+                        <i class="fa-regular fa-bed"></i>
+                        <h4>Bedroom</h4>
+                        <p>1 king bed</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What this place offers -->
+            <div class="amenities-section">
+                <h2>What this place offers</h2>
+                <div class="amenities-grid">
+                    <div class="amenity">
+                        <i class="fa-solid fa-wifi"></i>
+                        <span>Wifi</span>
+                    </div>
+                    <div class="amenity">
+                        <i class="fa-solid fa-tv"></i>
+                        <span>TV</span>
+                    </div>
+                    <div class="amenity">
+                        <i class="fa-solid fa-kitchen-set"></i>
+                        <span>Kitchen</span>
+                    </div>
+                    <div class="amenity">
+                        <i class="fa-solid fa-wind"></i>
+                        <span>AC</span>
+                    </div>
+                    <div class="amenity">
+                        <i class="fa-solid fa-square-parking"></i>
+                        <span>Free parking</span>
+                    </div>
+                    <div class="amenity">
+                        <i class="fa-solid fa-water-ladder"></i>
+                        <span>Pool</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="reviews-section">
+                <h2>
+                    <i class="fa-solid fa-star"></i> 
+                    <%= reviewCount > 0 ? avgRating : "New" %> · <%= reviewCount %> reviews
+                </h2>
+                
+                <% if(listing.reviews.length > 0) { %>
+                    <div class="reviews-grid">
+                        <% for(review of listing.reviews) { %>
+                            <div class="review-card">
+                                <div class="review-author">
+                                    <div class="author-avatar">
+                                        <span><%= review.author.username.charAt(0).toUpperCase() %></span>
+                                    </div>
+                                    <div class="author-info">
+                                        <h4><%= review.author.username %></h4>
+                                        <p><%= new Date(review.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) %></p>
+                                    </div>
+                                </div>
+                                <div class="review-rating">
+                                    <% for(let i = 1; i <= 5; i++) { %>
+                                        <i class="fa-<%= i <= review.rating ? 'solid' : 'regular' %> fa-star"></i>
+                                    <% } %>
+                                </div>
+                                <p class="review-comment"><%= review.comment %></p>
+                                <% if(currUser && review.author._id.equals(currUser._id)) { %>
+                                    <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="delete-review-form">
+                                        <button type="submit" class="delete-review-btn" onclick="return confirm('Delete this review?')">
+                                            <i class="fa-regular fa-trash-can"></i> Delete
+                                        </button>
+                                    </form>
+                                <% } %>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } else { %>
+                    <p class="no-reviews">No reviews yet. Be the first to leave a review!</p>
+                <% } %>
+            </div>
+
+            <!-- Add Review Form -->
+            <% if(currUser && !listing.owner._id.equals(currUser._id)) { %>
+                <div class="add-review-section">
+                    <h2><i class="fa-solid fa-comments"></i> Leave a review</h2>
+                    <form action="/listings/<%= listing._id %>/reviews" method="POST" class="review-form">
+                        <div class="rating-input">
+                            <label>Rating</label>
+                            <div class="star-rating">
+                                <input type="radio" name="review[rating]" value="5" id="star5" required><label for="star5">★</label>
+                                <input type="radio" name="review[rating]" value="4" id="star4"><label for="star4">★</label>
+                                <input type="radio" name="review[rating]" value="3" id="star3"><label for="star3">★</label>
+                                <input type="radio" name="review[rating]" value="2" id="star2"><label for="star2">★</label>
+                                <input type="radio" name="review[rating]" value="1" id="star1"><label for="star1">★</label>
+                            </div>
+                        </div>
+                        <div class="comment-input">
+                            <label for="comment">Comment</label>
+                            <textarea name="review[comment]" id="comment" rows="4" placeholder="Share your experience..." required></textarea>
+                        </div>
+                        <button type="submit" class="submit-review-btn">Submit review</button>
+                    </form>
+                </div>
+            <% } %>
+
+            <!-- Map Section -->
+            <div class="map-section">
+                <h2>Where you'll be</h2>
+                <p class="map-location"><%= listing.location %>, <%= listing.country %></p>
+                <div id="map"></div>
+            </div>
+        </div>
+
+        <!-- Right Column - Booking Card (Shows second on mobile) -->
+        <div class="right-column">
+            <div class="booking-card">
+                <div class="price-header">
+                    <span class="price">₹<%= listing.price.toLocaleString("en-IN") %></span>
+                    <span class="night">night</span>
+                </div>
+                
+                <div class="rating-reviews">
+                    <span class="rating">
+                        <i class="fa-solid fa-star"></i> <%= reviewCount > 0 ? avgRating : "New" %>
+                    </span>
+                    <span class="review-count">· <%= reviewCount %> reviews</span>
+                </div>
+
+                <!-- Real-time Date Picker and Guest Selector -->
+                <div class="dates-guests" id="bookingWidget">
+                    <div class="checkin-checkout">
+                        <div class="checkin">
+                            <label for="checkin">CHECK-IN</label>
+                            <input type="date" id="checkin" class="date-input" value="">
+                        </div>
+                        <div class="checkout">
+                            <label for="checkout">CHECKOUT</label>
+                            <input type="date" id="checkout" class="date-input" value="">
+                        </div>
+                    </div>
+                    <div class="guests">
+                        <label for="guests">GUESTS</label>
+                        <select id="guests" class="guest-select">
+                            <option value="1">1 guest</option>
+                            <option value="2">2 guests</option>
+                            <option value="3">3 guests</option>
+                            <option value="4">4 guests</option>
+                            <option value="5">5 guests</option>
+                            <option value="6">6 guests</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="reserve-btn" id="reserveBtn">Reserve</button>
+                <p class="no-charge">You won't be charged yet</p>
+
+                <div class="price-breakdown" id="priceBreakdown">
+                    <div class="price-row">
+                        <span>₹<%= listing.price.toLocaleString("en-IN") %> x <span id="nightCount">2</span> nights</span>
+                        <span id="totalNightsPrice">₹<%= (listing.price * 2).toLocaleString("en-IN") %></span>
+                    </div>
+                    <div class="price-row">
+                        <span>Cleaning fee</span>
+                        <span>₹1,200</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Service fee</span>
+                        <span>₹800</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Total before taxes</span>
+                        <span id="totalPrice">₹<%= (listing.price * 2 + 2000).toLocaleString("en-IN") %></span>
+                    </div>
+                </div>
+
+                <p class="cancellation-policy">
+                    <i class="fa-solid fa-info-circle"></i> Free cancellation for 24 hours
+                </p>
+
+                <% if(currUser && listing.owner._id.equals(currUser._id)){ %>
+                    <div class="owner-actions">
+                        <a href="/listings/<%= listing._id%>/edit" class="edit-btn">Edit listing</a>
+                        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+                            <button type="submit" class="delete-btn" onclick="return confirm('Delete this listing?')">Delete listing</button>
+                        </form>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/map.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set default dates (today + 1 and today + 2)
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    const dayAfter = new Date(today);
+    dayAfter.setDate(dayAfter.getDate() + 2);
+    
+    // Format dates for input fields (YYYY-MM-DD)
+    function formatDateForInput(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+    
+    const checkinInput = document.getElementById('checkin');
+    const checkoutInput = document.getElementById('checkout');
+    
+    if (checkinInput && checkoutInput) {
+        checkinInput.value = formatDateForInput(tomorrow);
+        checkoutInput.value = formatDateForInput(dayAfter);
+        checkinInput.min = formatDateForInput(today);
+        checkoutInput.min = formatDateForInput(tomorrow);
+    }
+    
+    // Update price when dates change
+    function updatePrice() {
+        if (!checkinInput || !checkoutInput) return;
+        
+        const checkin = new Date(checkinInput.value);
+        const checkout = new Date(checkoutInput.value);
+        
+        if (checkin && checkout && checkout > checkin) {
+            const nightDiff = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+            document.getElementById('nightCount').textContent = nightDiff;
+            
+            const pricePerNight = <%= listing.price %>;
+            const totalNights = pricePerNight * nightDiff;
+            const totalWithFees = totalNights + 2000; // Adding cleaning and service fees
+            
+            document.getElementById('totalNightsPrice').textContent = '₹' + totalNights.toLocaleString('en-IN');
+            document.getElementById('totalPrice').textContent = '₹' + totalWithFees.toLocaleString('en-IN');
+        }
+    }
+    
+    if (checkinInput && checkoutInput) {
+        checkinInput.addEventListener('change', updatePrice);
+        checkoutInput.addEventListener('change', updatePrice);
+    }
+    
+    // Wishlist functionality for show page
+    const wishlistBtn = document.getElementById('showPageWishlistBtn');
+    
+    async function checkWishlistStatus() {
+        <% if(currUser) { %>
+            try {
+                const response = await fetch('/api/wishlist');
+                if(response.ok) {
+                    const data = await response.json();
+                    const wishlistIds = data.wishlist.map(id => id.toString());
+                    const listingId = '<%= listing._id %>';
+                    
+                    if (wishlistIds.includes(listingId)) {
+                        wishlistBtn.querySelector('i').classList.remove('fa-regular');
+                        wishlistBtn.querySelector('i').classList.add('fa-solid');
+                    }
+                }
+            } catch(err) {
+                console.error('Error fetching wishlist:', err);
+            }
+        <% } %>
+    }
+    
+    checkWishlistStatus();
+    
+    if (wishlistBtn) {
+        wishlistBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            <% if(!currUser) { %>
+                window.location.href = '/login';
+                return;
+            <% } %>
+            
+            const listingId = '<%= listing._id %>';
+            const heartIcon = this.querySelector('i');
+            
+            try {
+                const response = await fetch(`/api/wishlist/toggle/${listingId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'added') {
+                    heartIcon.classList.remove('fa-regular');
+                    heartIcon.classList.add('fa-solid');
+                    showNotification('Added to wishlist!', 'success');
+                } else if (data.status === 'removed') {
+                    heartIcon.classList.remove('fa-solid');
+                    heartIcon.classList.add('fa-regular');
+                    showNotification('Removed from wishlist', 'success');
+                }
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        });
+    }
+});
+
+</script>
+<script>
+    // Booking functionality
+const reserveBtn = document.getElementById('reserveBtn');
+if (reserveBtn) {
+    reserveBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        
+        <% if(!currUser) { %>
+            window.location.href = '/login?message=Please log in to reserve a listing';
+            return;
+        <% } %>
+        
+        <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
+            showNotification('You cannot book your own listing', 'error');
+            return;
+        <% } %>
+        
+        const checkIn = document.getElementById('checkin').value;
+        const checkOut = document.getElementById('checkout').value;
+        const guests = document.getElementById('guests').value;
+        const totalPrice = document.getElementById('totalPrice').textContent.replace('₹', '').replace(/,/g, '');
+        const nights = document.getElementById('nightCount').textContent;
+        
+        if (!checkIn || !checkOut) {
+            showNotification('Please select check-in and check-out dates', 'error');
+            return;
+        }
+        
+        try {
+            const response = await fetch(`/listings/<%= listing._id %>/bookings`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    checkIn,
+                    checkOut,
+                    guests,
+                    totalPrice,
+                    nights
+                })
+            });
+            
+            // always navigate to trips on success; controller will redirect or return JSON
+            if (response.ok) {
+                window.location.href = '/trips';
+                return;
+            }
+            // handle errors returned as JSON
+            let data;
+            try { data = await response.json(); } catch (_) {}
+            if (data && data.error) {
+                showNotification(data.error, 'error');
+            } else {
+                showNotification('Failed to create booking', 'error');
+            }
+        } catch (err) {
+            console.error('Error:', err);
+            showNotification('Failed to create booking', 'error');
+        }
+    });
+}
+</script>

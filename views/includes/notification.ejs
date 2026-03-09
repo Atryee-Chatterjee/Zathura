@@ -1,0 +1,99 @@
+<!-- Flash Messages Container -->
+<div id="notification-container"></div>
+
+<!-- Notification Template -->
+<template id="notification-template">
+  <div class="alert-notification">
+    <div class="alert-content">
+      <div class="alert-icon">
+        <i class="fa-regular fa-circle-check"></i>
+      </div>
+      <div class="alert-message"></div>
+      <button
+        class="alert-close"
+        onclick="
+          event.stopPropagation();
+          this.closest('.alert-notification').remove();
+        "
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="alert-progress">
+      <div class="alert-progress-bar"></div>
+    </div>
+  </div>
+</template>
+
+<script>
+  // Notification system
+  (function() {
+      // Get flash messages from server
+      const flashMessages = {
+          success: <%- JSON.stringify(success || '') %>,
+          error: <%- JSON.stringify(error || '') %>
+      };
+
+      // Function to show notification
+      window.showNotification = function(message, type = 'success') {
+          const container = document.getElementById('notification-container');
+          const template = document.getElementById('notification-template');
+
+          if (!container || !template) {
+              console.error('Notification container or template not found');
+              return;
+          }
+
+          // Clone the template
+          const notification = template.content.cloneNode(true).children[0];
+
+          // Set type class
+          notification.classList.add(`alert-${type}`);
+
+          // Set icon based on type
+          const icon = notification.querySelector('.alert-icon i');
+          if (type === 'success') {
+              icon.className = 'fa-regular fa-circle-check';
+          } else if (type === 'error') {
+              icon.className = 'fa-regular fa-circle-xmark';
+          } else if (type === 'warning') {
+              icon.className = 'fa-regular fa-triangle-exclamation';
+          } else {
+              icon.className = 'fa-regular fa-circle-info';
+          }
+
+          // Set message
+          notification.querySelector('.alert-message').textContent = message;
+
+          // Add to container
+          container.appendChild(notification);
+
+          // Auto remove after 5 seconds
+          setTimeout(() => {
+              if (notification.parentElement) {
+                  notification.classList.add('fade-out');
+                  setTimeout(() => {
+                      if (notification.parentElement) {
+                          notification.remove();
+                      }
+                  }, 300);
+              }
+          }, 5000);
+
+          // Add click to remove
+          notification.addEventListener('click', function(e) {
+              if (e.target.closest('.alert-close')) return;
+              this.classList.add('fade-out');
+              setTimeout(() => this.remove(), 300);
+          });
+      };
+
+      // Show notification if flash message exists
+      if (flashMessages.success && flashMessages.success.length > 0) {
+          window.showNotification(flashMessages.success, 'success');
+      }
+      if (flashMessages.error && flashMessages.error.length > 0) {
+          window.showNotification(flashMessages.error, 'error');
+      }
+  })();
+</script>

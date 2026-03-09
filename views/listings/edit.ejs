@@ -1,0 +1,286 @@
+<% layout("/layouts/boilerplate") %>
+<% css = 'edit.css' %>
+
+<div class="edit-listing-page">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Edit your listing</h1>
+        <p>Update your space to attract more guests</p>
+    </div>
+
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" class="edit-form" enctype="multipart/form-data" id="editForm">
+
+        <!-- Title Section -->
+        <div class="form-group">
+            <label for="title">
+                <i class="fa-regular fa-pen-to-square"></i>
+                Title
+            </label>
+            <input 
+                type="text" 
+                name="listing[title]" 
+                id="title"
+                value="<%= listing.title %>" 
+                placeholder="e.g., Cozy beachfront cottage with amazing views" 
+                required
+            />
+            <div class="field-footer">
+                <span class="hint">Make it catchy to attract more guests!</span>
+                <span class="counter" id="titleCount"><%= listing.title.length %>/50</span>
+            </div>
+        </div>
+
+        <!-- Description Section -->
+        <div class="form-group">
+            <label for="description">
+                <i class="fa-regular fa-file-lines"></i>
+                Description
+            </label>
+            <textarea 
+                name="listing[description]" 
+                id="description"
+                placeholder="Tell guests what makes your place special. Highlight unique features, amenities, and the experience they'll have..."
+                required
+                rows="5"
+            ><%= listing.description %></textarea>
+            <div class="field-footer">
+                <span class="hint">Be detailed and honest - guests appreciate transparency!</span>
+                <span class="counter" id="descCount"><%= listing.description.length %>/500</span>
+            </div>
+        </div>
+
+        <!-- Current Image Section -->
+        <div class="form-group">
+            <label>
+                <i class="fa-regular fa-image"></i>
+                Current Image
+            </label>
+            <div class="current-image">
+                <img src="<%= originalImageUrl %>" alt="<%= listing.title %>">
+                <p class="image-note">This is your current listing image</p>
+            </div>
+        </div>
+
+        <!-- New Image Upload Section -->
+        <div class="form-group">
+            <label for="image">
+                <i class="fa-regular fa-cloud-upload"></i>
+                Upload New Image (Optional)
+            </label>
+            <div class="upload-area" id="uploadArea">
+                <input 
+                    type="file" 
+                    name="listing[image]" 
+                    id="image"
+                    accept="image/*"
+                    hidden
+                />
+                <div class="upload-content">
+                    <i class="fa-regular fa-cloud-upload"></i>
+                    <p>Click to upload or drag and drop</p>
+                    <small>PNG, JPG, GIF up to 10MB</small>
+                </div>
+                <div class="upload-preview" id="uploadPreview">
+                    <img src="" alt="Preview">
+                    <button type="button" class="remove-image" id="removeImage">
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <span class="hint">Leave empty to keep current image</span>
+        </div>
+
+        <!-- Price and Country Row -->
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="price">
+                    <i class="fa-regular fa-indian-rupee-sign"></i>
+                    Price per night
+                </label>
+                <div class="price-input">
+                    <span class="currency">₹</span>
+                    <input 
+                        type="number" 
+                        name="listing[price]" 
+                        id="price"
+                        value="<%= listing.price %>" 
+                        placeholder="2500"
+                        min="0"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div class="form-group half">
+                <label for="country">
+                    <i class="fa-regular fa-flag"></i>
+                    Country
+                </label>
+                <input 
+                    type="text" 
+                    name="listing[country]" 
+                    id="country"
+                    value="<%= listing.country %>"
+                    placeholder="e.g., India"
+                    required
+                />
+            </div>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="form-group">
+            <label for="category">
+                <i class="fa-regular fa-compass"></i>
+                Category
+            </label>
+            <div class="select-wrapper">
+                <select 
+                    name="listing[category]" 
+                    id="category"
+                    class="category-select"
+                    required
+                >
+                    <option value="" disabled>Select a category</option>
+                    <option value="Trending" <%= listing.category === "Trending" ? "selected" : "" %>> Trending</option>
+                    <option value="Rooms" <%= listing.category === "Rooms" ? "selected" : "" %>> Rooms</option>
+                    <option value="Iconic Cities" <%= listing.category === "Iconic Cities" ? "selected" : "" %>>Iconic Cities</option>
+                    <option value="Mountains" <%= listing.category === "Mountains" ? "selected" : "" %>> Mountains</option>
+                    <option value="Castles" <%= listing.category === "Castles" ? "selected" : "" %>> Castles</option>
+                    <option value="Amazing Pools" <%= listing.category === "Amazing Pools" ? "selected" : "" %>> Amazing Pools</option>
+                    <option value="Camping" <%= listing.category === "Camping" ? "selected" : "" %>> Camping</option>
+                    <option value="Farms" <%= listing.category === "Farms" ? "selected" : "" %>> Farms</option>
+                    <option value="Arctic" <%= listing.category === "Arctic" ? "selected" : "" %>>Arctic</option>
+                    <option value="Domes" <%= listing.category === "Domes" ? "selected" : "" %>> Domes</option>
+                    <option value="Boats" <%= listing.category === "Boats" ? "selected" : "" %>> Boats</option>
+                </select>
+                <i class="fa-regular fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+            <label for="location">
+                <i class="fa-regular fa-location-dot"></i>
+                Location
+            </label>
+            <input 
+                type="text" 
+                name="listing[location]" 
+                id="location"
+                value="<%= listing.location %>"
+                placeholder="e.g., Jaipur, Rajasthan"
+                required
+            />
+            <span class="hint">City and region help guests find your listing</span>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <a href="/listings/<%= listing._id %>" class="btn-secondary">Cancel</a>
+            <button type="submit" class="btn-primary" id="submitBtn">
+                Update listing
+                <i class="fa-regular fa-pen-to-square"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Character counters
+    const titleInput = document.getElementById('title');
+    const descInput = document.getElementById('description');
+    const titleCount = document.getElementById('titleCount');
+    const descCount = document.getElementById('descCount');
+
+    if (titleInput) {
+        titleInput.addEventListener('input', function() {
+            titleCount.textContent = `${this.value.length}/50`;
+        });
+    }
+
+    if (descInput) {
+        descInput.addEventListener('input', function() {
+            descCount.textContent = `${this.value.length}/500`;
+        });
+    }
+
+    // Image upload preview
+    const uploadArea = document.getElementById('uploadArea');
+    const imageInput = document.getElementById('image');
+    const uploadPreview = document.getElementById('uploadPreview');
+    const previewImg = uploadPreview.querySelector('img');
+    const removeBtn = document.getElementById('removeImage');
+
+    if (uploadArea && imageInput) {
+        uploadArea.addEventListener('click', function() {
+            imageInput.click();
+        });
+
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', function() {
+            this.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                imageInput.files = e.dataTransfer.files;
+                handleImagePreview(file);
+            }
+        });
+
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                handleImagePreview(this.files[0]);
+            }
+        });
+    }
+
+    function handleImagePreview(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            uploadPreview.style.display = 'block';
+            uploadArea.classList.add('has-image');
+        }
+        reader.readAsDataURL(file);
+    }
+
+    if (removeBtn) {
+        removeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            imageInput.value = '';
+            previewImg.src = '';
+            uploadPreview.style.display = 'none';
+            uploadArea.classList.remove('has-image');
+        });
+    }
+
+    // Form validation
+    const form = document.getElementById('editForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                const firstInvalid = form.querySelector(':invalid');
+                if (firstInvalid) {
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstInvalid.focus();
+                }
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Updating... <i class="fa-regular fa-spinner fa-spin"></i>';
+            }
+        });
+    }
+});
+</script>

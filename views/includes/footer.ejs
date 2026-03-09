@@ -1,0 +1,173 @@
+<footer class="footer">
+  <div class="footer-content">
+    <!-- Main Footer Grid -->
+    <div class="footer-grid">
+      <!-- Brand Section -->
+      <div class="footer-brand-section">
+        <div class="footer-logo">
+          <i class="fa-solid fa-rocket"></i>
+          <span>Zathura</span>
+        </div>
+        <p class="brand-tagline">
+          Find your perfect getaway, anywhere in the world.
+        </p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"
+            ><i class="fa-brands fa-facebook-f"></i
+          ></a>
+          <a href="#" aria-label="Instagram"
+            ><i class="fa-brands fa-instagram"></i
+          ></a>
+          <a href="#" aria-label="X (Twitter)"
+            ><i class="fa-brands fa-x-twitter"></i
+          ></a>
+          <a href="#" aria-label="LinkedIn"
+            ><i class="fa-brands fa-linkedin-in"></i
+          ></a>
+          <a href="#" aria-label="YouTube"
+            ><i class="fa-brands fa-youtube"></i
+          ></a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-links-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/careers">Careers</a></li>
+          <li><a href="/press">Press</a></li>
+          <li><a href="/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div class="footer-links-section">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="/help">Help Center</a></li>
+          <li><a href="/safety">Safety Information</a></li>
+          <li><a href="/cancellation">Cancellation Options</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Hosting -->
+      <div class="footer-links-section">
+        <h4>Hosting</h4>
+        <ul>
+          <li><a href="/host">Become a Host</a></li>
+          <li><a href="/responsible-hosting">Responsible Hosting</a></li>
+          <li><a href="/resource-centre">Resource Center</a></li>
+          <li><a href="/community">Community</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="footer-contact-section">
+        <h4>Stay Updated</h4>
+        <p class="contact-text">
+          Subscribe to our newsletter for exclusive deals and travel tips.
+        </p>
+        <form class="newsletter-form" id="newsletterForm">
+          <div class="form-group">
+            <input type="email" placeholder="Your email address" required />
+            <button type="submit">
+              <i class="fa-regular fa-paper-plane"></i>
+            </button>
+          </div>
+        </form>
+        <div class="contact-info">
+          <p><i class="fa-regular fa-envelope"></i> support@zathura.com</p>
+          <p><i class="fa-regular fa-phone"></i> +91 123 456 7890</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terms & Policy Section -->
+    <div class="terms-policy-section">
+      <div class="policy-grid">
+        <div class="policy-item">
+          <h4><i class="fa-regular fa-shield"></i> Privacy Policy</h4>
+          <p>
+            We respect your privacy. Your personal information is protected and
+            never shared with third parties without your consent.
+          </p>
+          <a href="/privacy" class="read-more"
+            >Read more <i class="fa-regular fa-arrow-right"></i
+          ></a>
+        </div>
+        <div class="policy-item">
+          <h4><i class="fa-regular fa-file-lines"></i> Terms of Service</h4>
+          <p>
+            By using Zathura, you agree to our terms. We ensure a safe and fair
+            platform for all users, both guests and hosts.
+          </p>
+          <a href="/terms" class="read-more"
+            >Read more <i class="fa-regular fa-arrow-right"></i
+          ></a>
+        </div>
+        <div class="policy-item">
+          <h4><i class="fa-regular fa-scale-balanced"></i> Legal</h4>
+          <p>
+            Zathura operates in compliance with all applicable laws. View our
+            legal information and company details.
+          </p>
+          <a href="/company-details" class="read-more"
+            >Read more <i class="fa-regular fa-arrow-right"></i
+          ></a>
+        </div>
+        <div class="policy-item">
+          <h4><i class="fa-regular fa-cookie"></i> Cookie Policy</h4>
+          <p>
+            We use cookies to enhance your experience. Learn about how we use
+            cookies and your preferences.
+          </p>
+          <a href="/cookies" class="read-more"
+            >Read more <i class="fa-regular fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="footer-bottom-bar">
+      <div class="copyright">
+        <span>© 2026 Zathura, Inc. All rights reserved.</span>
+      </div>
+      <div class="legal-links">
+        <a href="/privacy">Privacy</a>
+        <span class="separator">•</span>
+        <a href="/terms">Terms</a>
+        <span class="separator">•</span>
+        <a href="/sitemap">Sitemap</a>
+        <span class="separator">•</span>
+        <a href="/company-details">Company Details</a>
+      </div>
+      <div class="language-currency">
+        <span class="lang-currency-item">
+          <i class="fa-solid fa-globe"></i> English (IN)
+        </span>
+        <span class="lang-currency-item">
+          <i class="fa-solid fa-indian-rupee-sign"></i> INR
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document
+    .getElementById("newsletterForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+      const email = this.querySelector('input[type="email"]').value;
+      if (window.showNotification) {
+        window.showNotification(
+          "Thanks for subscribing! Check your email for updates.",
+          "success",
+        );
+      }
+      this.reset();
+    });
+</script>

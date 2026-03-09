@@ -1,0 +1,281 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="new-listing-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>List your space</h1>
+    <p>Share your place with travelers around the world</p>
+  </div>
+
+  <!-- Form Container  -->
+  <form
+    action="/listings"
+    method="POST"
+    class="listing-form"
+    enctype="multipart/form-data"
+    id="listingForm"
+  >
+    <!-- Title Section -->
+    <div class="form-group">
+      <label for="title">
+        <i class="fa-regular fa-pen-to-square"></i>
+        Give your place a title
+      </label>
+      <input
+        type="text"
+        name="listing[title]"
+        id="title"
+        placeholder="e.g., Cozy beachfront cottage with amazing views"
+        required
+      />
+      <div class="field-footer">
+        <span class="hint">Catchy titles attract more guests!</span>
+        <span class="counter" id="titleCount">0/50</span>
+      </div>
+    </div>
+
+    <!-- Description Section -->
+    <div class="form-group">
+      <label for="description">
+        <i class="fa-regular fa-file-lines"></i>
+        Describe your place
+      </label>
+      <textarea
+        name="listing[description]"
+        id="description"
+        placeholder="Tell guests what makes your place special. Highlight unique features, amenities, and the experience they'll have..."
+        required
+        rows="4"
+      ></textarea>
+      <div class="field-footer">
+        <span class="hint"
+          >Be detailed and honest - guests appreciate transparency!</span
+        >
+        <span class="counter" id="descCount">0/500</span>
+      </div>
+    </div>
+
+    <!-- Image Upload Section -->
+    <div class="form-group">
+      <label for="image">
+        <i class="fa-regular fa-image"></i>
+        Add some photos
+      </label>
+      <div class="upload-area" id="uploadArea">
+        <input
+          type="file"
+          name="listing[image]"
+          id="image"
+          accept="image/*"
+          required
+          hidden
+        />
+        <div class="upload-content">
+          <i class="fa-regular fa-cloud-upload"></i>
+          <p>Click to upload or drag and drop</p>
+          <small>PNG, JPG, GIF up to 10MB</small>
+        </div>
+        <div class="upload-preview" id="uploadPreview">
+          <img src="" alt="Preview" />
+          <button type="button" class="remove-image" id="removeImage">
+            <i class="fa-regular fa-circle-xmark"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price and Country Row -->
+    <div class="form-row">
+      <div class="form-group half">
+        <label for="price">
+          <i class="fa-regular fa-indian-rupee-sign"></i>
+          Price per night
+        </label>
+        <div class="price-input">
+          <span class="currency">₹</span>
+          <input
+            type="number"
+            name="listing[price]"
+            id="price"
+            placeholder="2500"
+            min="0"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group half">
+        <label for="country">
+          <i class="fa-regular fa-flag"></i>
+          Country
+        </label>
+        <input
+          type="text"
+          name="listing[country]"
+          id="country"
+          placeholder="e.g., India"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Category Dropdown -->
+    <div class="form-group">
+      <label for="category">
+        <i class="fa-regular fa-compass"></i>
+        Choose a category
+      </label>
+      <div class="select-wrapper">
+        <select
+          name="listing[category]"
+          id="category"
+          class="category-select"
+          required
+        >
+          <option value="" disabled selected>Select a category</option>
+          <option value="Trending">Trending</option>
+          <option value="Rooms">Rooms</option>
+          <option value="Iconic Cities">Iconic Cities</option>
+          <option value="Mountains">Mountains</option>
+          <option value="Castles">Castles</option>
+          <option value="Amazing Pools">Amazing Pools</option>
+          <option value="Camping">Camping</option>
+          <option value="Farms">Farms</option>
+          <option value="Arctic">Arctic</option>
+          <option value="Domes">Domes</option>
+          <option value="Boats">Boats</option>
+        </select>
+        <i class="fa-regular fa-chevron-down select-arrow"></i>
+      </div>
+    </div>
+
+    <!-- Location -->
+    <div class="form-group">
+      <label for="location">
+        <i class="fa-regular fa-location-dot"></i>
+        Where's your place located?
+      </label>
+      <input
+        type="text"
+        name="listing[location]"
+        id="location"
+        placeholder="e.g., Jaipur, Rajasthan"
+        required
+      />
+      <span class="hint">City and region help guests find your listing</span>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <a href="/listings" class="btn-secondary">Cancel</a>
+      <button type="submit" class="btn-primary" id="submitBtn">
+        Publish listing
+        <i class="fa-regular fa-arrow-right"></i>
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Character counters
+    const titleInput = document.getElementById("title");
+    const descInput = document.getElementById("description");
+    const titleCount = document.getElementById("titleCount");
+    const descCount = document.getElementById("descCount");
+
+    if (titleInput) {
+      titleInput.addEventListener("input", function () {
+        titleCount.textContent = `${this.value.length}/50`;
+      });
+    }
+
+    if (descInput) {
+      descInput.addEventListener("input", function () {
+        descCount.textContent = `${this.value.length}/500`;
+      });
+    }
+
+    // Image upload preview
+    const uploadArea = document.getElementById("uploadArea");
+    const imageInput = document.getElementById("image");
+    const uploadPreview = document.getElementById("uploadPreview");
+    const previewImg = uploadPreview.querySelector("img");
+    const removeBtn = document.getElementById("removeImage");
+
+    if (uploadArea && imageInput) {
+      uploadArea.addEventListener("click", function () {
+        imageInput.click();
+      });
+
+      uploadArea.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        this.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", function () {
+        this.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", function (e) {
+        e.preventDefault();
+        this.classList.remove("dragover");
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith("image/")) {
+          imageInput.files = e.dataTransfer.files;
+          handleImagePreview(file);
+        }
+      });
+
+      imageInput.addEventListener("change", function () {
+        if (this.files && this.files[0]) {
+          handleImagePreview(this.files[0]);
+        }
+      });
+    }
+
+    function handleImagePreview(file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        previewImg.src = e.target.result;
+        uploadPreview.style.display = "block";
+        uploadArea.classList.add("has-image");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    if (removeBtn) {
+      removeBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        imageInput.value = "";
+        previewImg.src = "";
+        uploadPreview.style.display = "none";
+        uploadArea.classList.remove("has-image");
+      });
+    }
+
+    // Form validation
+    const form = document.getElementById("listingForm");
+    const submitBtn = document.getElementById("submitBtn");
+
+    if (form) {
+      form.addEventListener("submit", function (e) {
+        if (!form.checkValidity()) {
+          e.preventDefault();
+          const firstInvalid = form.querySelector(":invalid");
+          if (firstInvalid) {
+            firstInvalid.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+            firstInvalid.focus();
+          }
+        } else {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML =
+            'Creating... <i class="fa-regular fa-spinner fa-spin"></i>';
+        }
+      });
+    }
+  });
+</script>

@@ -1,0 +1,364 @@
+.profile-nav {
+  margin: 1rem 0 2rem 0;
+}
+
+.back-home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #222222;
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 40px;
+  border: 1px solid #dddddd;
+  transition: all 0.2s ease;
+}
+
+.back-home-btn:hover {
+  background-color: #f7f7f7;
+  border-color: #222222;
+}
+
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto 3rem auto;
+}
+
+.profile-header {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(10, 10, 10, 0.129);
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.profile-cover {
+  height: 100px;
+  background: linear-gradient(135deg, #ff385c 0%, #e61e4d 100%);
+  position: relative;
+}
+
+.profile-avatar {
+  position: absolute;
+  bottom: -40px;
+  left: 2rem;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #222222;
+  border: 3px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-letter {
+  color: white;
+  font-size: 2.2rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.profile-info {
+  padding: 3rem 2rem 2rem 2rem;
+}
+
+.profile-details {
+  padding-left: 0;
+}
+
+.profile-name {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #222222;
+  margin-bottom: 0.5rem;
+}
+
+.profile-email,
+.profile-member-since {
+  color: #717171;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-email i,
+.profile-member-since i {
+  color: #ff385c;
+  width: 20px;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222222;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.section-title i {
+  color: #ff385c;
+  margin-right: 0.5rem;
+}
+
+.about-content {
+  color: #222222;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.review-card {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: border-color 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.075);
+}
+
+.review-card:hover {
+  border-color: #ddd;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.review-listing-info {
+  color: #717171;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.review-listing-info i {
+  color: #ff385c;
+}
+
+.review-date {
+  color: #717171;
+  font-size: 0.85rem;
+}
+
+.review-rating {
+  margin-bottom: 0.8rem;
+}
+
+.review-rating i {
+  color: #ff385c;
+  font-size: 0.9rem;
+  margin-right: 0.1rem;
+}
+
+.review-comment {
+  color: #222222;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 0.8rem;
+}
+
+.view-listing-link {
+  color: #ff385c;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.view-listing-link:hover {
+  text-decoration: underline;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #717171;
+}
+
+.empty-state i {
+  font-size: 2rem;
+  color: #ddd;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 0 1rem;
+  }
+
+  .profile-avatar {
+    width: 60px;
+    height: 60px;
+    bottom: -30px;
+  }
+
+  .avatar-letter {
+    font-size: 1.8rem;
+  }
+
+  .profile-info {
+    padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+  }
+
+  .profile-name {
+    font-size: 1.5rem;
+  }
+}
+/* Profile Actions - Wishlist and Logout buttons */
+.profile-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 40px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid #dddddd;
+  background-color: white;
+  color: #222222;
+}
+
+.action-btn:hover {
+  background-color: #f7f7f7;
+  border-color: #222222;
+}
+
+.action-btn i {
+  font-size: 1rem;
+}
+
+.logout-btn {
+  color: #ff385c;
+  border-color: #ff385c;
+}
+
+.logout-btn:hover {
+  background-color: #ff385c;
+  color: white;
+  border-color: #ff385c;
+}
+
+.logout-btn:hover i {
+  color: white;
+}
+
+/* Review Actions - View and Delete buttons */
+.review-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid #eee;
+}
+
+.review-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.view-btn {
+  background-color: #f7f7f7;
+  color: #222222;
+  border: 1px solid #dddddd;
+}
+
+.view-btn:hover {
+  background-color: #222222;
+  color: white;
+  border-color: #222222;
+}
+
+.delete-btn {
+  background-color: #fff1f0;
+  color: #ff385c;
+  border: 1px solid #ff385c;
+}
+
+.delete-btn:hover {
+  background-color: #ff385c;
+  color: white;
+}
+
+.delete-review-form {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.review-action-btn i {
+  font-size: 0.9rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .profile-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .review-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .review-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

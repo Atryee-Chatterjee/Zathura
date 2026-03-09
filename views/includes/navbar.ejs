@@ -1,0 +1,140 @@
+<nav class="navbar navbar-expand-md sticky-top border-bottom">
+  <div class="container-fluid">
+    <!-- LEFT: LOGO -->
+    <a class="navbar-brand d-flex align-items-center" href="/listings">
+      <i class="fa-solid fa-rocket"></i>
+      <span id="appName" class="ms-2 d-none d-sm-inline">Zathura</span>
+    </a>
+
+    <!-- CENTER: SEARCH BAR - Shows on all screens, centered -->
+    <div class="search-wrapper">
+      <form id="searchForm" 
+            action="/listings" 
+            method="GET" 
+            class="airbnb-search-bar">
+        <input 
+          type="text"
+          name="location"
+          id="locationSearch"
+          class="main-search-input"
+          placeholder="Anywhere | Any week | Add guests "
+          value="<%= typeof searchQuery !== 'undefined' && searchQuery.trim() ? searchQuery : '' %>"
+        />
+        <button type="button" class="clear-btn" id="clearSearch" style="display: none;">
+          <i class="fa-solid fa-times"></i>
+        </button>
+        <button type="submit" class="search-btn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+
+<!-- RIGHT: HOST & AUTH LINKS (desktop) + HAMBURGER -->
+<div class="right-section d-flex align-items-center">
+  <!-- Desktop links (hidden on mobile) -->
+  <div class="desktop-links d-none d-md-flex align-items-center">
+    <a class="nav-link fw-bold" href="/listings/new">Become a host</a>
+    
+    <% if(!currUser){ %>
+      <a class="nav-link fw-bold" href="/signup">Sign up</a>
+      <a class="nav-link fw-bold me-3" href="/login">Log in</a>
+    <% } else { %>
+      <!-- Black Profile Circle - Links to Profile Page -->
+      <a href="/profile" class="profile-circle-link" title="View profile">
+        <span class="profile-circle">
+          <span class="profile-initial"><%= currUser.username.charAt(0).toUpperCase() %></span>
+        </span>
+      </a>
+      
+      <!-- Profile Dropdown (existing) -->
+      <div class="dropdown">
+        <button class="btn profile-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa-regular fa-user"></i>
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="/profile">
+            <i class="fa-regular fa-circle-user me-2"></i> Profile
+          </a></li>
+          <li><a class="dropdown-item" href="/wishlist">
+            <i class="fa-regular fa-heart me-2"></i> Wishlist
+          </a></li>
+          <li><a class="dropdown-item" href="/trips">
+            <i class="fa-solid fa-plane-departure me-2"></i> Trips
+          </a></li>
+          <li><a class="dropdown-item" href="/listings/new">
+            <i class="fa-regular fa-plus-square me-2"></i> Become a host
+          </a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="/logout">
+            <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Log out
+          </a></li>
+        </ul>
+      </div>
+    <% } %>
+  </div>
+  
+  <!-- Hamburger Toggle (visible on mobile) -->
+  <button class="navbar-toggler" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#navbarNavAltMarkup">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+</div>
+  </div>
+
+  
+<!-- COLLAPSE MENU - Mobile Only -->
+<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+  <div class="navbar-nav d-md-none px-3 pb-3">
+    <a class="nav-link fw-bold py-2" href="/listings/new">
+      <i class="fa-regular fa-plus-square me-2"></i>Become a host
+    </a>
+    <% if(!currUser){ %>
+      <a class="nav-link fw-bold py-2" href="/signup">Sign up</a>
+      <a class="nav-link fw-bold py-2" href="/login">Log in</a>
+    <% } else { %>
+      <a class="nav-link fw-bold py-2" href="/profile">
+        <i class="fa-regular fa-circle-user me-2"></i> Profile
+      </a>
+      <a class="nav-link fw-bold py-2" href="/wishlist">
+        <i class="fa-regular fa-heart me-2"></i> Wishlist
+      </a>
+      <a class="nav-link fw-bold py-2" href="/trips">
+        <i class="fa-solid fa-plane-departure me-2"></i> Trips
+      </a>
+      <a class="nav-link fw-bold py-2 text-danger" href="/logout">
+        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Log out
+      </a>
+    <% } %>
+  </div>
+</div>
+</nav>
+
+<script>
+  const searchInput = document.getElementById('locationSearch');
+  const clearBtn = document.getElementById('clearSearch');
+
+  // Show/hide clear button based on input value
+  searchInput.addEventListener('input', function() {
+    if (this.value.trim()) {
+      clearBtn.style.display = 'flex';
+    } else {
+      clearBtn.style.display = 'none';
+    }
+  });
+
+  // Clear input on button click
+  clearBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    searchInput.value = '';
+    clearBtn.style.display = 'none';
+    searchInput.focus();
+  });
+
+  // Check on page load
+  if (searchInput.value.trim()) {
+    clearBtn.style.display = 'flex';
+  }
+</script>
