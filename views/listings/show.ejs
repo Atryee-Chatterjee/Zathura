@@ -46,7 +46,7 @@
             <%= reviewCount > 0 ? avgRating : "New" %> · <%= reviewCount %> reviews
         </span>
         <span class="location-badge">
-            <i class="fa-regular fa-map"></i> <%= listing.location %>, <%= listing.country %>
+            <i class="fa-regular fa-map"></i> <%= listing.location %>
         </span>
     </div>
 
@@ -68,7 +68,7 @@
                 </div>
                 <div class="host-details">
                     <h3>Hosted by <%= listing.owner.username %></h3>
-                    <p><%= listing.location %>, <%= listing.country %></p>
+                    <p><%= listing.location %></p>
                     <p class="host-meta">
                         <span><i class="fa-regular fa-user"></i> 2 guests</span>
                         <span><i class="fa-regular fa-bed"></i> 1 bedroom</span>
@@ -219,7 +219,7 @@
             <!-- Map Section -->
             <div class="map-section">
                 <h2>Where you'll be</h2>
-                <p class="map-location"><%= listing.location %>, <%= listing.country %></p>
+                <p class="map-location"><%= listing.location %></p>
                 <div id="map"></div>
             </div>
         </div>
