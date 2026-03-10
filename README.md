@@ -229,7 +229,7 @@ Create a `.env` file in the root directory:
 
 ```env
 # Database Configuration
-ATLASDB_URL=mongodb+srv://username:password@cluster.mongodb.net/zathura
+ATLASDB_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/zathura
 NODE_ENV=production
 
 # Session Management
@@ -242,7 +242,6 @@ CLOUDINARY_SECRET=your-cloudinary-api-secret
 
 # Mapbox Configuration (Maps)
 MAP_TOKEN=your-mapbox-public-token
-```
 
 #### 4. Obtain API Keys
 
