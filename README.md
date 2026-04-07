@@ -1,4 +1,4 @@
-# 🏨 Zathura - Airbnb Clone
+# 🏨 Zathura - A full-stack accommodation booking platform
 
 A full-stack, production-ready accommodation booking platform built with Node.js, Express.js, and MongoDB. Zathura features modern web development practices and comprehensive functionality for property listings, user authentication, and booking management.
 
@@ -480,6 +480,7 @@ Server will run on: **http://localhost:8080**
 **Atryee Chatterjee**
 
 **GitHub:** [@Atryee-Chatterjee](https://github.com/Atryee-Chatterjee)
+**LinkedIn:** [@atryee-chatterjee](https://www.linkedin.com/in/atryee-chatterjee)
 
 ---
 
